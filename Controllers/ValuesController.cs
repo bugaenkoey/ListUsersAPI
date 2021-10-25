@@ -28,15 +28,27 @@ namespace ListUsersAPI.Controllers
         public async Task<User[]> Get()
         {
             using FileStream openStream = System.IO.File.OpenRead(@"C:\Users\asus\source\repos\ListUsersAPI\ListUserJson\users.json");
-            User[] users2 = await JsonSerializer.DeserializeAsync<User[]>(openStream);
+            User[] users = await JsonSerializer.DeserializeAsync<User[]>(openStream);
 
-            return users2;
+            return users;
         }
       
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<User> Get(int id)
         {
-            return "this id - " + id;
+           
+            using FileStream openStream = System.IO.File.OpenRead(@"C:\Users\asus\source\repos\ListUsersAPI\ListUserJson\users.json");
+            User[] users = await JsonSerializer.DeserializeAsync<User[]>(openStream);
+            User oneUser= new User();
+            foreach (var user in users)
+            {
+                if (user.id ==id)
+                {
+                    return user;
+                }
+            }
+            
+            return oneUser;
         }
 
         [HttpPost]
@@ -46,9 +58,9 @@ namespace ListUsersAPI.Controllers
         }
 
         [HttpPut]
-        public string Put()
+        public void Put()
         {
-            return "**PUT**";
+            
         }
 
         [HttpDelete("{id}")]
